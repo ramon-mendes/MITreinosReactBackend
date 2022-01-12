@@ -1,0 +1,52 @@
+﻿@model CourseLessonModel
+@section head {
+}
+@section scripts {
+	<script>
+		$('#btn-save').click(function() {
+			$('#form-fields').submit();
+			return false;
+		});
+	</script>
+
+	@if(!ViewBag.is_create)
+	{
+	}
+}
+
+<nav>
+	@Html.Breadcrumb(ViewBag.is_create ? "Criar lição" : "Editar lição", "Módulos", "/Admin/Module/List/" + Model.ModuleId, "Cursos", "/Admin/Course/List/")
+
+	<div class="actions">
+		<div class="container">
+			<div class="wrap">
+				<a href="" class="btn btn-primary" id="btn-save">
+					<svg class="icon icon-save"><use xlink:href="#save"></use></svg> Salvar
+				</a>
+			</div>
+		</div>
+	</div>
+</nav>
+
+<div class="container">
+	<form method="post" id="form-fields">
+		<div class="form-group">
+			<label class="control-label">Título:</label>
+			<input type="text" class="form-control" asp-for="Title" />
+			<span asp-validation-for="Title" class="text-danger"></span>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label">Vídeo:</label>
+			<input type="text" class="form-control" asp-for="VideoPath" />
+			<span asp-validation-for="VideoPath" class="text-danger"></span>
+		</div>
+
+		<input type="hidden" value="@Model.ModuleId" asp-for="ModuleId" />
+
+		@if(!ViewBag.is_create)
+		{
+			<input type="hidden" value="@Model.Id" asp-for="Id" />
+		}
+	</form>
+</div>

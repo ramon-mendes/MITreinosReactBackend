@@ -1,0 +1,57 @@
+﻿@model CourseModel
+
+<nav>
+	@Html.Breadcrumb("Módulos", "Cursos", "/Admin/Course/List/")
+
+	<div class="actions">
+		<div class="container">
+			<div class="wrap">
+				<a href="/Admin/Module/Add/@Model.Id" class="btn btn-primary">
+					<svg class="icon icon-plus-2"><use xlink:href="#plus-2"></use></svg> Adicionar
+				</a>
+			</div>
+		</div>
+	</div>
+</nav>
+
+<div class="container content">
+	@if(Model.Modules.Count() == 0)
+	{
+		<div class="field-validation-error">Nenhum registro encontrado</div>
+	}
+	else
+	{
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Título</th>
+					<th>Lições</th>
+					<th width="1"></th>
+				</tr>
+			</thead>
+
+			<tbody>
+				@foreach(var item in Model.Modules)
+				{
+					<tr>
+						<td>@item.Title</td>
+						<td>
+							<a href="/Admin/Lesson/List/@item.Id">
+								@item.Lessons.Count lições
+							</a>
+						</td>
+						<td>
+							<a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-primary btn-sm">
+								<svg class="icon icon-pencil"><use xlink:href="#pencil"></use></svg>
+							</a>
+
+							<a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger btn-sm deleter">
+								<svg class="icon icon-trash-b"><use xlink:href="#trash-b"></use></svg>
+							</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+</div>

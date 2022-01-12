@@ -1,0 +1,10 @@
+﻿<div class="sidebar">
+	<div class="p-3">
+		<img src="~/img/logo.png" />
+	</div>
+	
+	<ul class="links">
+		<li class="@Html.PrintIf((string)ViewBag.controller == "Course", "active")"><a href="/Admin/Course/List"><svg class="icon icon-stream"><use xlink:href="#stream"></use></svg>Cursos</a></li>
+		<li><a href="/Admin/Auth/Logout"><svg class="icon icon-power-off"><use xlink:href="#power-off"></use></svg>Logout</a></li>
+	</ul>
+</div>

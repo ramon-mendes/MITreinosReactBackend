@@ -1,0 +1,25 @@
+﻿<script src="~/lib/jquery-3.6.0.min.js"></script>
+<script src="~/lib/popper.min.js"></script>
+<script src="~/lib/bootstrap-5.0.2-dist/js/bootstrap.js"></script>
+<script src="~/lib/bootstrap-notify.min.js"></script>
+<script src="~/lib/bootbox.min.js"></script>
+<script src="~/js/tsoutput/global.js"></script>
+
+<script>
+	var _DATA_dbg = @Html.Raw(ViewBag.indbg);
+
+	@if(TempData["msg-alert"] != null)
+	{
+		@:$.notify('@TempData["msg-alert"]', { allow_dismiss: false });
+	}
+
+	@if(TempData["msg-error"]!= null)
+	{
+		@:$.notify('@TempData["msg-error"]', { allow_dismiss: false, type: 'danger' });
+	}
+
+	@if(TempData["msg-success"] != null)
+	{
+		@:$.notify('@TempData["msg-success"]', { allow_dismiss: false, type: 'success' });
+	}
+</script>

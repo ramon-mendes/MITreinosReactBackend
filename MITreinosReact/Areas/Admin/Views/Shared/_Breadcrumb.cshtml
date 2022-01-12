@@ -1,0 +1,13 @@
+﻿@model List<(string Name, string Url)>
+
+<div class="container h-100 d-flex align-items-center">
+	<ol class="breadcrumb">
+		@for(int i = 0; i < Model.Count - 1; i++)
+		{
+			<li class="breadcrumb-item"><a href="@Model[i].Url">@Model[i].Name</a></li>
+		}
+		<li class="breadcrumb-item active">
+			@Model.Last().Name
+		</li>
+	</ol>
+</div>

@@ -1,0 +1,36 @@
+﻿.table
+{
+	thead
+	{
+		th
+		{
+			text-transform: uppercase;
+			border: none;
+		}
+	}
+
+	tbody
+	{
+		tr
+		{
+			background: white;
+			border-top: solid 2px #F2F2F2;
+
+			td { vertical-align: middle !important; }
+
+			td:last-child
+			{
+				white-space: nowrap;
+			
+				a svg
+				{
+					width: 12px;
+					height: 12px;
+					margin-right: 0;
+				}
+			}
+
+			.text-danger { font-weight: bold; }
+		}
+	}
+}

@@ -1,0 +1,44 @@
+﻿@model CourseModel
+@section head {
+}
+@section scripts {
+	<script>
+		$('#btn-save').click(function() {
+			$('#form-fields').submit();
+			return false;
+		});
+	</script>
+
+	@if(!ViewBag.is_create)
+	{
+	}
+}
+
+<nav>
+	@Html.Breadcrumb(ViewBag.is_create ? "Criar curso" : "Editar curso", "Cursos", "/Admin/Course/List")
+
+	<div class="actions">
+		<div class="container">
+			<div class="wrap">
+				<a href="" class="btn btn-primary" id="btn-save">
+					<svg class="icon icon-save"><use xlink:href="#save"></use></svg> Salvar
+				</a>
+			</div>
+		</div>
+	</div>
+</nav>
+
+<div class="container">
+	<form method="post" id="form-fields">
+		<div class="form-group">
+			<label class="control-label">Título:</label>
+			<input type="text" class="form-control" asp-for="Title" />
+			<span asp-validation-for="Title" class="text-danger"></span>
+		</div>
+
+		@if(!ViewBag.is_create)
+		{
+			<input type="hidden" value="@Model.Id" asp-for="Id" />
+		}
+	</form>
+</div>

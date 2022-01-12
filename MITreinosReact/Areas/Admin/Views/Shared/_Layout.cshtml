@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>MITreinos</title>
+
+	<partial name="Partial/_Head" model="EArea.ADMIN" />
+
+	@RenderSection("head", required: false)
+</head>
+
+<body>
+	<partial name="_Sidebar" />
+
+	<main>
+		@RenderBody()
+	</main>
+
+	<partial name="Partial/_Scripts" />
+
+	@RenderSection("scripts", required: false)
+</body>
+</html>

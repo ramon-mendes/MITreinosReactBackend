@@ -1,0 +1,29 @@
+﻿@model UserManagerModel
+@{
+	Layout = "_LayoutEmpty";
+}
+@section head {
+	<link href="~/css/Admin/login.css" rel="stylesheet" />
+}
+
+<div class="wrap">
+	<img src="~/img/logo.png" id="logo" />
+
+	<form id="area-login" method="post">
+		<div class="input-group input-group-lg">
+			<input type="text" class="form-control" placeholder="E-mail" asp-for="Email" autofocus />
+		</div>
+
+		<div class="input-group input-group-lg">
+			<input type="password" class="form-control" placeholder="Senha" asp-for="PWD" />
+		</div>
+
+		<span asp-validation-for="Authorized" class="text-danger"></span>
+
+		<button type="submit" class="btn btn-primary btn-block">
+			<svg class="icon icon-arrow-right"><use xlink:href="#arrow-right"></use></svg>
+		</button>
+
+		<input type="hidden" asp-for="ReturnUrl" />
+	</form>
+</div>

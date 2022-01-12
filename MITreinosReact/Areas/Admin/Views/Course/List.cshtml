@@ -1,0 +1,73 @@
+﻿@model IEnumerable<CourseModel>
+
+<nav>
+	@Html.Breadcrumb("Cursos")
+
+	<div class="actions">
+		<div class="container">
+			<div class="wrap">
+				<a href="/Admin/Course/Add" class="btn btn-primary">
+					<svg class="icon icon-plus-2"><use xlink:href="#plus-2"></use></svg> Adicionar
+				</a>
+			</div>
+		</div>
+	</div>
+</nav>
+
+<div class="container content">
+	<form method="post" class="area-search">
+		<h3>Filtrar</h3>
+
+		<div class="row">
+			<div class="col-3">
+				@*User name:
+				<input type="text" name="@nameof(UI_PurchaseSearch.UserName)" value="@ViewBag.search.UserName" class="form-control js-dt" />*@
+			</div>
+		</div>
+
+		<div class="btns">
+			<button type="submit" class="btn btn-primary"><svg class="icon icon-filter"><use xlink:href="#filter"></use></svg> Buscar</button>
+			<a href="" class="btn btn-danger"><svg class="icon icon-cancel"><use xlink:href="#cancel"></use></svg> Limpar</a>
+		</div>
+	</form>
+
+	@if(Model.Count() == 0)
+	{
+		<div class="field-validation-error">Nenhum registro encontrado</div>
+	}
+	else
+	{
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Título</th>
+					<th>Módulos</th>
+					<th width="1"></th>
+				</tr>
+			</thead>
+
+			<tbody>
+				@foreach(var item in Model)
+				{
+					<tr>
+						<td>@item.Title</td>
+						<td>
+							<a href="/Admin/Module/List/@item.Id">
+								@item.Modules.Count módulos
+							</a>
+						</td>
+						<td>
+							<a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-primary btn-sm">
+								<svg class="icon icon-pencil"><use xlink:href="#pencil"></use></svg>
+							</a>
+
+							<a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger btn-sm deleter">
+								<svg class="icon icon-trash-b"><use xlink:href="#trash-b"></use></svg>
+							</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+</div>
