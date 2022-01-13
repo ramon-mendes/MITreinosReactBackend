@@ -25,8 +25,8 @@ namespace MITreinosReact.Controllers.API
 		[HttpPost]
 		public IActionResult Login([FromBody]LoginBody model)
 		{
-			bool bOK = AuthLogin(model.email, model.password);
-			return bOK ? Ok() : Unauthorized();
+			string token =  AuthLogin(model.email, model.password);
+			return token != null ? Ok(token) : Unauthorized();
 		}
 
 		[HttpGet]

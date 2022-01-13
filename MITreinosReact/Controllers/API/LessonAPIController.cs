@@ -11,14 +11,19 @@ using MITreinosReact.Models;
 using Xabe.FFmpeg;
 using Xabe.FFmpeg.Downloader;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MITreinosReact.Controllers.API
 {
 	public class LessonAPIController : BaseAuthAPIController
 	{
-		public LessonAPIController(MIContext db)
+		private IServiceScopeFactory _scopeFactory;
+
+		public LessonAPIController(MIContext db, IServiceScopeFactory scopeFactory)
 		{
 			_db = db;
+			_scopeFactory = scopeFactory;
 		}
 
 		private UserLessonWatchModel GetWatchModel(int lessonId, int userId)
@@ -90,43 +95,52 @@ namespace MITreinosReact.Controllers.API
 			_db.SaveChanges();
 			return Ok();
 		}
+
 		private async Task<string> SaveLessonMP3(string hash)
         {
-			string outputPath = Startup.MapPath("App_Data/mp3/" + hash + ".mp3");
-			var lesson = _db.CourseLessons.Single(l => l.URLhash == hash);
+            using(var scope = _scopeFactory.CreateScope())
+            {
+				string outputPath = Startup.MapPath("App_Data/mp3/" + hash + ".mp3");
 
-			if (!System.IO.File.Exists(outputPath))
-			{
-				HttpClient client = new HttpClient();
-				client.Timeout = TimeSpan.FromMinutes(5);
-				var video = await client.GetAsync(lesson.VideoPath);
-				video.EnsureSuccessStatusCode();
-				var data = await video.Content.ReadAsByteArrayAsync();
-				var tmpcache = Path.GetTempFileName();
-				System.IO.File.WriteAllBytes(tmpcache, data);
+				var db = scope.ServiceProvider.GetRequiredService<MIContext>();
+				var lesson = db.CourseLessons.Single(l => l.URLhash == hash);
 
-				FFmpeg.SetExecutablesPath(Environment.CurrentDirectory);
-				IMediaInfo mediaInfo = await FFmpeg.GetMediaInfo(tmpcache);
+				if(!System.IO.File.Exists(outputPath))
+				{
+                    using(HttpClient client = new HttpClient())
+                    {
+						client.Timeout = TimeSpan.FromMinutes(5);
+						var video = await client.GetAsync(lesson.VideoPath);
+						video.EnsureSuccessStatusCode();
+						var data = await video.Content.ReadAsByteArrayAsync();
+						var tmpcache = Path.GetTempFileName();
+						System.IO.File.WriteAllBytes(tmpcache, data);
 
-				IStream audioStream = mediaInfo.AudioStreams.FirstOrDefault()
-					?.SetCodec(AudioCodec.mp3);
+						FFmpeg.SetExecutablesPath(Environment.CurrentDirectory);
+						IMediaInfo mediaInfo = await FFmpeg.GetMediaInfo(tmpcache);
 
-				await FFmpeg.Conversions.New()
-					.AddStream(audioStream)
-					.SetOutput(outputPath)
-					.Start();
+						IStream audioStream = mediaInfo.AudioStreams.FirstOrDefault()
+							?.SetCodec(AudioCodec.mp3);
+
+						await FFmpeg.Conversions.New()
+							.AddStream(audioStream)
+							.SetOutput(outputPath)
+							.Start();
+					}
+				}
+
+				return outputPath.Replace('\\', '/');
 			}
-
-			return outputPath;
 		}
 
 		[HttpGet]
 		public IActionResult LoadCourseMP3([Required] string slug)
         {
 			var course = _db.Courses.Single(c => c.Slug == slug);
+			var lessons = course.Lessons.ToList();
 			Task.Run(() =>
 			{
-				Parallel.ForEach(course.Lessons, new ParallelOptions() { MaxDegreeOfParallelism = 10 }, (lesson) =>
+				Parallel.ForEach(lessons, new ParallelOptions() { MaxDegreeOfParallelism = 10 }, (lesson) =>
 				{
 					SaveLessonMP3(lesson.Value.URLhash).Wait();
 				});
@@ -136,11 +150,13 @@ namespace MITreinosReact.Controllers.API
         }
 
 		[HttpGet]
-		public async Task<IActionResult> GetMP3([Required] string hash)
+		public async Task<IActionResult> GetMP3NoAuth([Required] string hash)
 		{
 			var lesson = _db.CourseLessons.Single(l => l.URLhash == hash);
 			string output = await SaveLessonMP3(hash);
-			return File(output, "audio/mpeg", Path.GetFileName(lesson.VideoPath));
+			bool exists = System.IO.File.Exists(output);
+			byte[] data = System.IO.File.ReadAllBytes(output);
+			return File(data, "audio/mpeg", Path.GetFileName(lesson.VideoPath));
 		}
 	}
 }

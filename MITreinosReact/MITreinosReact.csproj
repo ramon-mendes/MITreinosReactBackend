@@ -5,6 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ffmpeg.exe" />
+    <None Remove="ffprobe.exe" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ffmpeg.exe" />
+    <Content Include="ffprobe.exe" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="10.3.6" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.13" />
@@ -19,6 +29,10 @@
     <PackageReference Include="shortid" Version="2.0.4" />
     <PackageReference Include="Xabe.FFmpeg" Version="5.0.2" />
     <PackageReference Include="Xabe.FFmpeg.Downloader" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="App_Data\mp3\" />
   </ItemGroup>
 
 </Project>
