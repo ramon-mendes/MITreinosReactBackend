@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using MITreinosReact.Classes;
 using MITreinosReact.DAL;
 using MITreinosReact.Models;
@@ -15,20 +17,34 @@ namespace MITreinosReact.Controllers.API
 {
 	public class StaticAPIController : BaseAuthAPIController
 	{
-		public StaticAPIController(MIContext db)
+		private readonly ILogger<StaticAPIController> _logger;
+
+		public StaticAPIController(MIContext db, ILogger<StaticAPIController> logger)
 		{
 			_db = db;
+			_logger = logger;
 		}
 
 		private List<UI_Module> LoadCourseModules(CourseModel course)
 		{
+			Stopwatch sw = new Stopwatch();
+			sw.Start();
+
 			var modules = new List<UI_Module>();
 			foreach(var item in course.Modules)
 			{
 				var lessons = new List<UI_Lesson>();
 
-				foreach(var item2 in item.Lessons.OrderBy(l => l.Order))
+				Stopwatch sw4 = new Stopwatch();
+				var dblessons = item.Lessons.OrderBy(l => l.Order).ToList();
+				sw4.Stop();
+				_logger.LogError("sw4" + sw4.ElapsedMilliseconds + "ms");
+
+				foreach(var item2 in dblessons)
 				{
+					Stopwatch sw2 = new Stopwatch();
+					sw2.Restart();
+
 					var watch = _db.UserWatchs.FirstOrDefault(uw => uw.LessonId == item.Id && uw.UserId == UserLogged.Id);
 					lessons.Add(new UI_Lesson()
 					{
@@ -36,8 +52,12 @@ namespace MITreinosReact.Controllers.API
 						Title = item2.Title,
 						Completed = watch != null && watch.Watched,
 					});
+
+					sw2.Stop();
+					_logger.LogError("inner loop took " + sw2.ElapsedMilliseconds + "ms");
 				}
 
+				Stopwatch sw3 = new Stopwatch();
 				for(int i = 0; i < lessons.Count; i++)
 				{
 					lessons[i].Prev = i == 0 ? null : lessons[i - 1].Hash;
@@ -53,7 +73,11 @@ namespace MITreinosReact.Controllers.API
 					Title = item.Title,
 					Lessons = lessons
 				});
+				_logger.LogError("sw3 " + sw3.ElapsedMilliseconds + "ms");
 			}
+
+			sw.Stop();
+			_logger.LogError("LoadCourseModules took " + sw.ElapsedMilliseconds + "ms");
 
 			return modules;
 		}
@@ -61,6 +85,7 @@ namespace MITreinosReact.Controllers.API
 		[HttpGet]
 		public IActionResult GetForCourse([Required] string slug)
 		{
+			_logger.LogError("GetForCourse " + slug);
 			var course = _db.Courses.SingleOrDefault(c => c.Slug == slug);
 			if(course == null)
 				return NotFound();

@@ -13,17 +13,20 @@ using Xabe.FFmpeg.Downloader;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace MITreinosReact.Controllers.API
 {
 	public class LessonAPIController : BaseAuthAPIController
 	{
-		private IServiceScopeFactory _scopeFactory;
+		private readonly IServiceScopeFactory _scopeFactory;
+		private readonly ILogger<LessonAPIController> _logger;
 
-		public LessonAPIController(MIContext db, IServiceScopeFactory scopeFactory)
+		public LessonAPIController(MIContext db, IServiceScopeFactory scopeFactory, ILogger<LessonAPIController> logger)
 		{
 			_db = db;
 			_scopeFactory = scopeFactory;
+            _logger = logger;
 		}
 
 		private UserLessonWatchModel GetWatchModel(int lessonId, int userId)
@@ -98,38 +101,51 @@ namespace MITreinosReact.Controllers.API
 
 		private async Task<string> SaveLessonMP3(string hash)
         {
-            using(var scope = _scopeFactory.CreateScope())
+            try
             {
-				string outputPath = Startup.MapPath("App_Data/mp3/" + hash + ".mp3");
+				_logger.LogInformation("SaveLessonMP3: " + hash);
 
-				var db = scope.ServiceProvider.GetRequiredService<MIContext>();
-				var lesson = db.CourseLessons.Single(l => l.URLhash == hash);
-
-				if(!System.IO.File.Exists(outputPath))
+				using(var scope = _scopeFactory.CreateScope())
 				{
-                    using(HttpClient client = new HttpClient())
-                    {
-						client.Timeout = TimeSpan.FromMinutes(5);
-						var video = await client.GetAsync(lesson.VideoPath);
-						video.EnsureSuccessStatusCode();
-						var data = await video.Content.ReadAsByteArrayAsync();
-						var tmpcache = Path.GetTempFileName();
-						System.IO.File.WriteAllBytes(tmpcache, data);
+					string outputPath = Startup.MapPath("App_Data/mp3/" + hash + ".mp3");
 
-						FFmpeg.SetExecutablesPath(Environment.CurrentDirectory);
-						IMediaInfo mediaInfo = await FFmpeg.GetMediaInfo(tmpcache);
+					var db = scope.ServiceProvider.GetRequiredService<MIContext>();
+					var lesson = db.CourseLessons.Single(l => l.URLhash == hash);
 
-						IStream audioStream = mediaInfo.AudioStreams.FirstOrDefault()
-							?.SetCodec(AudioCodec.mp3);
+					if(!System.IO.File.Exists(outputPath))
+					{
+						using(HttpClient client = new HttpClient())
+						{
+							client.Timeout = TimeSpan.FromMinutes(5);
+							var video = await client.GetAsync(lesson.VideoPath);
+							video.EnsureSuccessStatusCode();
+							var data = await video.Content.ReadAsByteArrayAsync();
+							string tmpcache = Startup.MapPath("App_Data\\mp3\\" + hash + ".mp4");
+							System.IO.File.WriteAllBytes(tmpcache, data);
 
-						await FFmpeg.Conversions.New()
-							.AddStream(audioStream)
-							.SetOutput(outputPath)
-							.Start();
+							FFmpeg.SetExecutablesPath(Environment.CurrentDirectory);
+							IMediaInfo mediaInfo = await FFmpeg.GetMediaInfo(tmpcache);
+
+							IStream audioStream = mediaInfo.AudioStreams.FirstOrDefault()
+								?.SetCodec(AudioCodec.mp3);
+
+							await FFmpeg.Conversions.New()
+								.AddStream(audioStream)
+								.SetOutput(outputPath)
+								.Start();
+
+							System.IO.File.Delete(tmpcache);
+						}
 					}
-				}
 
-				return outputPath.Replace('\\', '/');
+					return outputPath.Replace('\\', '/');
+				}
+				_logger.LogInformation("Done processing lesson: " + hash);
+			}
+			catch(Exception ex)
+            {
+				_logger.LogError(ex.ToString());
+				throw;
 			}
 		}
 
@@ -140,10 +156,14 @@ namespace MITreinosReact.Controllers.API
 			var lessons = course.Lessons.ToList();
 			Task.Run(() =>
 			{
-				Parallel.ForEach(lessons, new ParallelOptions() { MaxDegreeOfParallelism = 10 }, (lesson) =>
-				{
+                foreach(var lesson in lessons)
+                {
 					SaveLessonMP3(lesson.Value.URLhash).Wait();
-				});
+				}
+				//Parallel.ForEach(lessons, new ParallelOptions() { MaxDegreeOfParallelism = 1 }, (lesson) =>
+				//{
+				//	SaveLessonMP3(lesson.Value.URLhash).Wait();
+				//});
 			});
 			
 			return Ok();

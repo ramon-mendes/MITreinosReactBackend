@@ -20,6 +20,7 @@ namespace MITreinosReact.Controllers
 
         public string Index()
         {
+            _logger.LogInformation("INIT BY MIDI");
             return "Machine running";
         }
 
