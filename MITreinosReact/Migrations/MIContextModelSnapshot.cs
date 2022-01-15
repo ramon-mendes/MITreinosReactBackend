@@ -16,6 +16,28 @@ namespace MITreinosReact.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.13");
 
+            modelBuilder.Entity("MITreinosReact.Models.CourseLessonDownloadModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LessonId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LessonId");
+
+                    b.ToTable("CourseLessonDownloads");
+                });
+
             modelBuilder.Entity("MITreinosReact.Models.CourseLessonModel", b =>
                 {
                     b.Property<int>("Id")
@@ -246,6 +268,7 @@ namespace MITreinosReact.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
+                        .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -278,6 +301,7 @@ namespace MITreinosReact.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
+                        .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -301,6 +325,17 @@ namespace MITreinosReact.Migrations
                             Name = "Ramon",
                             PWD = "123456"
                         });
+                });
+
+            modelBuilder.Entity("MITreinosReact.Models.CourseLessonDownloadModel", b =>
+                {
+                    b.HasOne("MITreinosReact.Models.CourseLessonModel", "Lesson")
+                        .WithMany("Downloads")
+                        .HasForeignKey("LessonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lesson");
                 });
 
             modelBuilder.Entity("MITreinosReact.Models.CourseLessonModel", b =>
@@ -378,6 +413,11 @@ namespace MITreinosReact.Migrations
                     b.Navigation("Lesson");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MITreinosReact.Models.CourseLessonModel", b =>
+                {
+                    b.Navigation("Downloads");
                 });
 
             modelBuilder.Entity("MITreinosReact.Models.CourseModel", b =>

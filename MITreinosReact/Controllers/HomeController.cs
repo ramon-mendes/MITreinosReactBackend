@@ -21,7 +21,7 @@ namespace MITreinosReact.Controllers
         public string Index()
         {
             _logger.LogInformation("INIT BY MIDI");
-            return "Machine running";
+            return "Machine running. Environment: " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

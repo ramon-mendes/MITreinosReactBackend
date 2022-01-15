@@ -22,7 +22,7 @@ namespace MITreinosReact.DAL
 		public DbSet<CourseModel> Courses { get; set; }
 		public DbSet<CourseModuleModel> CourseModules { get; set; }
 		public DbSet<CourseLessonModel> CourseLessons { get; set; }
-		public DbSet<CourseLessonDownloadModel> CourseLessons { get; set; }
+		public DbSet<CourseLessonDownloadModel> CourseLessonDownloads { get; set; }
 		public DbSet<UserCourseModel> UserCourse { get; set; }
 		public DbSet<UserLessonWatchModel> UserWatchs { get; set; }
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

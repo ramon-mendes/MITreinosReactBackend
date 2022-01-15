@@ -33,7 +33,7 @@ namespace MITreinosReact.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Email = table.Column<string>(type: "TEXT", nullable: true),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 150, nullable: true),
                     PWD = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
@@ -48,7 +48,7 @@ namespace MITreinosReact.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Email = table.Column<string>(type: "TEXT", nullable: true),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 150, nullable: true),
                     PWD = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
@@ -86,8 +86,7 @@ namespace MITreinosReact.Migrations
                     CourseId = table.Column<int>(type: "INTEGER", nullable: false),
                     Order = table.Column<int>(type: "INTEGER", nullable: false),
                     Title = table.Column<string>(type: "TEXT", nullable: true),
-                    Slug = table.Column<string>(type: "TEXT", nullable: true),
-                    JsName = table.Column<string>(type: "TEXT", nullable: true)
+                    Slug = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -119,6 +118,27 @@ namespace MITreinosReact.Migrations
                         name: "FK_CourseLessons_CourseModules_ModuleId",
                         column: x => x.ModuleId,
                         principalTable: "CourseModules",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CourseLessonDownloads",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    LessonId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Url = table.Column<string>(type: "TEXT", nullable: true),
+                    Title = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourseLessonDownloads", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CourseLessonDownloads_CourseLessons_LessonId",
+                        column: x => x.LessonId,
+                        principalTable: "CourseLessons",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -209,13 +229,13 @@ namespace MITreinosReact.Migrations
 
             migrationBuilder.InsertData(
                 table: "CoursePageModel",
-                columns: new[] { "Id", "CourseId", "JsName", "Order", "Slug", "Title" },
-                values: new object[] { 1, 1, "filmes", 1, "filmes", "Filmes" });
+                columns: new[] { "Id", "CourseId", "Order", "Slug", "Title" },
+                values: new object[] { 1, 1, 1, "ieorientacoes", "Orientações" });
 
             migrationBuilder.InsertData(
                 table: "CoursePageModel",
-                columns: new[] { "Id", "CourseId", "JsName", "Order", "Slug", "Title" },
-                values: new object[] { 2, 2, "filmes", 1, "filmes", "Filmes" });
+                columns: new[] { "Id", "CourseId", "Order", "Slug", "Title" },
+                values: new object[] { 2, 2, 1, "ieorientacoes", "Orientações" });
 
             migrationBuilder.InsertData(
                 table: "UserCourse",
@@ -226,6 +246,11 @@ namespace MITreinosReact.Migrations
                 table: "UserCourse",
                 columns: new[] { "Id", "CourseId", "CurrentLessonId", "JsonMeta", "UserId" },
                 values: new object[] { 2, 2, null, "{ 'show_accept': true }", 1 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseLessonDownloads_LessonId",
+                table: "CourseLessonDownloads",
+                column: "LessonId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CourseLessons_ModuleId",
@@ -282,6 +307,9 @@ namespace MITreinosReact.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CourseLessonDownloads");
+
             migrationBuilder.DropTable(
                 name: "CoursePageModel");
 

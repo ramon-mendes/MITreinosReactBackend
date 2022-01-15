@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MITreinosReact.Migrations
 {
     [DbContext(typeof(MIContext))]
-    [Migration("20220114231232_InitialCreate")]
+    [Migration("20220115142742_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -17,6 +17,28 @@ namespace MITreinosReact.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.13");
+
+            modelBuilder.Entity("MITreinosReact.Models.CourseLessonDownloadModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LessonId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LessonId");
+
+                    b.ToTable("CourseLessonDownloads");
+                });
 
             modelBuilder.Entity("MITreinosReact.Models.CourseLessonModel", b =>
                 {
@@ -129,9 +151,6 @@ namespace MITreinosReact.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("JsName")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("Order")
                         .HasColumnType("INTEGER");
 
@@ -152,19 +171,17 @@ namespace MITreinosReact.Migrations
                         {
                             Id = 1,
                             CourseId = 1,
-                            JsName = "filmes",
                             Order = 1,
-                            Slug = "filmes",
-                            Title = "Filmes"
+                            Slug = "ieorientacoes",
+                            Title = "Orientações"
                         },
                         new
                         {
                             Id = 2,
                             CourseId = 2,
-                            JsName = "filmes",
                             Order = 1,
-                            Slug = "filmes",
-                            Title = "Filmes"
+                            Slug = "ieorientacoes",
+                            Title = "Orientações"
                         });
                 });
 
@@ -253,6 +270,7 @@ namespace MITreinosReact.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
+                        .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -285,6 +303,7 @@ namespace MITreinosReact.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
+                        .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -308,6 +327,17 @@ namespace MITreinosReact.Migrations
                             Name = "Ramon",
                             PWD = "123456"
                         });
+                });
+
+            modelBuilder.Entity("MITreinosReact.Models.CourseLessonDownloadModel", b =>
+                {
+                    b.HasOne("MITreinosReact.Models.CourseLessonModel", "Lesson")
+                        .WithMany("Downloads")
+                        .HasForeignKey("LessonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lesson");
                 });
 
             modelBuilder.Entity("MITreinosReact.Models.CourseLessonModel", b =>
@@ -385,6 +415,11 @@ namespace MITreinosReact.Migrations
                     b.Navigation("Lesson");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MITreinosReact.Models.CourseLessonModel", b =>
+                {
+                    b.Navigation("Downloads");
                 });
 
             modelBuilder.Entity("MITreinosReact.Models.CourseModel", b =>

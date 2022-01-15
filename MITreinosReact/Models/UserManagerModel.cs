@@ -13,6 +13,7 @@ namespace MITreinosReact.Models
 		[Key]
 		public int Id  { get; set; }
 		public string Name { get; set; }
+		[StringLength(150)]
 		public string Email { get; set; }
 		public string PWD { get; set; }
 

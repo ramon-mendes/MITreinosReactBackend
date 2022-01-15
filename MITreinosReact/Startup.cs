@@ -36,7 +36,8 @@ namespace MITreinosReact
             }));
 
             services.AddDbContext<MIContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("dbconn"))
+				options.UseSqlServer(Configuration.GetConnectionString("conn_sqlserver_azure"))
+                //options.UseSqlite(Configuration.GetConnectionString("conn_sqlserver_azure"))
             );
 
             services.AddControllersWithViews()
@@ -48,6 +49,7 @@ namespace MITreinosReact
         {
 			_env = env;
 
+			db.Database.EnsureDeleted();
             db.Database.Migrate();
 
             //if (env.IsDevelopment())
