@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -82,6 +83,15 @@ namespace MITreinosReact.Controllers.API
 			return modules;
 		}
 
+		private List<UI_Page> LoadCoursePages(CourseModel course)
+		{
+			return course.Pages.OrderBy(p => p.Order).Select(p => new UI_Page()
+			{
+				Title = p.Title,
+				Slug = p.Slug,
+			}).ToList();
+		}
+
 		[HttpGet]
 		public IActionResult GetForCourse([Required] string slug)
 		{
@@ -109,7 +119,9 @@ namespace MITreinosReact.Controllers.API
 					LogoURL = course.LogoURL,
 					Slug = course.Slug,
 					Title = course.Title,
-					Modules = LoadCourseModules(course)
+					JsonMeta = JsonConvert.DeserializeObject(usercourse.JsonMeta),
+					Pages = LoadCoursePages(course),
+					Modules = LoadCourseModules(course),
 				},
 				Meta = new UI_CourseMeta()
 				{
@@ -125,6 +137,21 @@ namespace MITreinosReact.Controllers.API
 			}
 
 			return JsonData(res);
+		}
+
+        [HttpPost]
+		public async Task<IActionResult> SetCourseMeta(string course)
+		{
+			using(StreamReader stream = new StreamReader(HttpContext.Request.Body))
+			{
+				string body = await stream.ReadToEndAsync();
+
+				var usercourse = _db.UserCourse.Single(uc => uc.UserId == UserLogged.Id && uc.Course.Slug == course);
+				usercourse.JsonMeta = body;
+				_db.SaveChanges();
+			}
+			
+			return Ok();
 		}
 
 		[HttpGet]
@@ -148,7 +175,7 @@ namespace MITreinosReact.Controllers.API
 
 			#region Homens
 			{
-				dynamic modules = JsonConvert.DeserializeObject(System.IO.File.ReadAllText("C:/Users/r.fernandes.mendes/Documents/ProjetosMVC/MITreinosReact/MITreinosReact/App_Data/ie-homens.json"));
+				dynamic modules = JsonConvert.DeserializeObject(System.IO.File.ReadAllText(Startup.MapPath("App_Data/ie-homens.json")));
 				foreach(var module in modules)
 				{
 					string title = module.title;
@@ -187,7 +214,7 @@ namespace MITreinosReact.Controllers.API
 
 			#region Mulheres
 			{
-				dynamic modules = JsonConvert.DeserializeObject(System.IO.File.ReadAllText("C:/Users/r.fernandes.mendes/Documents/ProjetosMVC/MITreinosReact/MITreinosReact/App_Data/ie-mulheres.json"));
+				dynamic modules = JsonConvert.DeserializeObject(System.IO.File.ReadAllText(Startup.MapPath("App_Data/ie-mulheres.json")));
 				foreach(var module in modules)
 				{
 					string title = module.title;

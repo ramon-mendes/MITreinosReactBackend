@@ -17,16 +17,13 @@ namespace MITreinosReact.Models
 		public string VideoPath { get; set; }
 		public string URLhash { get; set; }
 		public virtual CourseModuleModel Module { get; set; }
+		public virtual List<CourseLessonDownloadModel> Downloads { get; set; }
 	}
 
 	public class CourseLessonValidator : AbstractValidator<CourseLessonModel>
 	{
 		public CourseLessonValidator()
 		{
-			RuleFor(x => x.ModuleId).NotEmpty();
-			RuleFor(x => x.Title).NotEmpty();
-			RuleFor(x => x.VideoPath).NotEmpty();
-			RuleFor(x => x.URLhash).NotEmpty();
 		}
 	}
 }

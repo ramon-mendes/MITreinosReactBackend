@@ -5,15 +5,10 @@ using System.Threading.Tasks;
 
 namespace MITreinosReact.Models.UI
 {
-	public enum EPageKind
-	{
-		PAGE,
-		LESSON,
-	}
-
 	public class UI_Page
 	{
-		public EPageKind Kind { get; set; }
-		public string Page { get; set; }
+		public string Slug { get; set; }
+		public string JsName { get; set; }
+		public string Title { get; set; }
 	}
 }

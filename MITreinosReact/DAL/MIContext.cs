@@ -17,15 +17,14 @@ namespace MITreinosReact.DAL
 			: base(options)
 		{
 		}
-
 		public DbSet<UserModel> Users { get; set; }
 		public DbSet<UserManagerModel> UserManagers { get; set; }
 		public DbSet<CourseModel> Courses { get; set; }
 		public DbSet<CourseModuleModel> CourseModules { get; set; }
 		public DbSet<CourseLessonModel> CourseLessons { get; set; }
+		public DbSet<CourseLessonDownloadModel> CourseLessons { get; set; }
 		public DbSet<UserCourseModel> UserCourse { get; set; }
 		public DbSet<UserLessonWatchModel> UserWatchs { get; set; }
-
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			optionsBuilder.UseLazyLoadingProxies();
@@ -60,7 +59,6 @@ namespace MITreinosReact.DAL
 				});
 			});
 
-
 			// Import courses
 			modelBuilder.Entity<CourseModel>(b =>
 			{
@@ -86,12 +84,35 @@ namespace MITreinosReact.DAL
 					Id = 1,
 					CourseId = 1,
 					UserId = 1,
+					JsonMeta = "{ 'show_accept': true }",
 				});
 				b.HasData(new UserCourseModel()
 				{
 					Id = 2,
 					CourseId = 2,
 					UserId = 1,
+					JsonMeta = "{ 'show_accept': true }",
+				});
+			});
+
+			// IE pages
+			modelBuilder.Entity<CoursePageModel>(b =>
+			{
+				b.HasData(new CoursePageModel()
+				{
+					Id = 1,
+					CourseId = 1,
+					Title = "Orientações",
+					Order = 1,
+					Slug = "ieorientacoes",
+				});
+				b.HasData(new CoursePageModel()
+				{
+					Id = 2,
+					CourseId = 2,
+					Title = "Orientações",
+					Order = 1,
+					Slug = "ieorientacoes",
 				});
 			});
 		}

@@ -20,6 +20,7 @@ namespace MITreinosReact.Models
 		public bool DateBased { get; set; }
 
 		public virtual List<CourseModuleModel> Modules { get; set; }
+		public virtual List<CoursePageModel> Pages { get; set; }
 
 		[JsonIgnore]
 		[NotMapped]

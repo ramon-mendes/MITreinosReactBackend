@@ -12,7 +12,9 @@ namespace MITreinosReact.Models.UI
 		public string Title { get; set; }
 		public string LogoURL { get; set; }
 		public string About { get; set; }
+		public object JsonMeta { get; set; }
 
+		public List<UI_Page> Pages { get; set; }
 		public List<UI_Module> Modules { get; set; }
 	}
 }

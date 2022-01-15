@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MITreinosReact.Migrations
 {
     [DbContext(typeof(MIContext))]
-    [Migration("20220111170543_Initialcreate")]
-    partial class Initialcreate
+    [Migration("20220114231232_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -120,6 +120,54 @@ namespace MITreinosReact.Migrations
                     b.ToTable("CourseModules");
                 });
 
+            modelBuilder.Entity("MITreinosReact.Models.CoursePageModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("JsName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Slug")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("CoursePageModel");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CourseId = 1,
+                            JsName = "filmes",
+                            Order = 1,
+                            Slug = "filmes",
+                            Title = "Filmes"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CourseId = 2,
+                            JsName = "filmes",
+                            Order = 1,
+                            Slug = "filmes",
+                            Title = "Filmes"
+                        });
+                });
+
             modelBuilder.Entity("MITreinosReact.Models.UserCourseModel", b =>
                 {
                     b.Property<int>("Id")
@@ -131,6 +179,9 @@ namespace MITreinosReact.Migrations
 
                     b.Property<int?>("CurrentLessonId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("JsonMeta")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
@@ -150,12 +201,14 @@ namespace MITreinosReact.Migrations
                         {
                             Id = 1,
                             CourseId = 1,
+                            JsonMeta = "{ 'show_accept': true }",
                             UserId = 1
                         },
                         new
                         {
                             Id = 2,
                             CourseId = 2,
+                            JsonMeta = "{ 'show_accept': true }",
                             UserId = 1
                         });
                 });
@@ -279,6 +332,17 @@ namespace MITreinosReact.Migrations
                     b.Navigation("Course");
                 });
 
+            modelBuilder.Entity("MITreinosReact.Models.CoursePageModel", b =>
+                {
+                    b.HasOne("MITreinosReact.Models.CourseModel", "Course")
+                        .WithMany("Pages")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
             modelBuilder.Entity("MITreinosReact.Models.UserCourseModel", b =>
                 {
                     b.HasOne("MITreinosReact.Models.CourseModel", "Course")
@@ -326,6 +390,8 @@ namespace MITreinosReact.Migrations
             modelBuilder.Entity("MITreinosReact.Models.CourseModel", b =>
                 {
                     b.Navigation("Modules");
+
+                    b.Navigation("Pages");
                 });
 
             modelBuilder.Entity("MITreinosReact.Models.CourseModuleModel", b =>

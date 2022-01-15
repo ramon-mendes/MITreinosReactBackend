@@ -3,14 +3,16 @@ using System;
 using MITreinosReact.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MITreinosReact.Migrations
 {
     [DbContext(typeof(MIContext))]
-    partial class MIContextModelSnapshot : ModelSnapshot
+    [Migration("20220115001706_InitialCreate2")]
+    partial class InitialCreate2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,6 +129,9 @@ namespace MITreinosReact.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("JsName")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Order")
                         .HasColumnType("INTEGER");
 
@@ -147,16 +152,18 @@ namespace MITreinosReact.Migrations
                         {
                             Id = 1,
                             CourseId = 1,
+                            JsName = "orientacoes",
                             Order = 1,
-                            Slug = "ieorientacoes",
+                            Slug = "orientacoes",
                             Title = "Orientações"
                         },
                         new
                         {
                             Id = 2,
                             CourseId = 2,
+                            JsName = "orientacoes",
                             Order = 1,
-                            Slug = "ieorientacoes",
+                            Slug = "orientacoes",
                             Title = "Orientações"
                         });
                 });

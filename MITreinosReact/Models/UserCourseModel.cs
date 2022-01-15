@@ -11,6 +11,7 @@ namespace MITreinosReact.Models
 		public int UserId { get; set; }
 		public int CourseId { get; set; }
 		public int? CurrentLessonId { get; set; }
+		public string JsonMeta { get; set; }
 
 		public virtual CourseLessonModel CurrentLesson { get; set; }
 		public virtual CourseModel Course { get; set; }
