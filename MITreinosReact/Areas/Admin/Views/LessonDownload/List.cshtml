@@ -1,12 +1,12 @@
-﻿@model CourseModuleModel
+﻿@model CourseLessonModel
 
 <nav>
-	@Html.Breadcrumb("Lições", "Módulos", "/Admin/Module/List/" + Model.CourseId, "Cursos", "/Admin/Course/List/")
+	@Html.Breadcrumb("Downloads", "Lições", "/Admin/Lesson/List/" + Model.ModuleId, "Módulos", "/Admin/Module/List/" + Model.Module.CourseId, "Cursos", "/Admin/Course/List/")
 
 	<div class="actions">
 		<div class="container">
 			<div class="wrap">
-				<a href="/Admin/Lesson/Add/@Model.Id" class="btn btn-primary">
+				<a href="/Admin/LessonDownload/Add/@Model.Id" class="btn btn-primary">
 					<svg class="icon icon-plus-2"><use xlink:href="#plus-2"></use></svg> Adicionar
 				</a>
 			</div>
@@ -15,7 +15,7 @@
 </nav>
 
 <div class="container content">
-	@if(Model.Lessons.Count() == 0)
+	@if(Model.Downloads.Count() == 0)
 	{
 		<div class="field-validation-error">Nenhum registro encontrado</div>
 	}
@@ -24,18 +24,16 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th>Título</th>
-					<th>Downloads</th>
+					<th>URL</th>
 					<th width="1"></th>
 				</tr>
 			</thead>
 
 			<tbody>
-				@foreach(var item in Model.Lessons)
+				@foreach(var item in Model.Downloads)
 				{
 					<tr>
-						<td>@item.Title</td>
-						<td><a href="/Admin/LessonDownload/List/@item.Id">@item.Downloads.Count downloads</a></td>
+						<td>@item.Url</td>
 						<td>
 							<a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-primary btn-sm">
 								<svg class="icon icon-pencil"><use xlink:href="#pencil"></use></svg>

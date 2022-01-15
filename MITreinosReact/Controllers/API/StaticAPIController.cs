@@ -171,8 +171,6 @@ namespace MITreinosReact.Controllers.API
 		{
 			ShortId.SetCharacters("abcdefghijklmnopqrstuvxwyz0123456789");
 
-			int imodule = 1;
-
 			#region Homens
 			{
 				dynamic modules = JsonConvert.DeserializeObject(System.IO.File.ReadAllText(Startup.MapPath("App_Data/ie-homens.json")));
@@ -180,14 +178,15 @@ namespace MITreinosReact.Controllers.API
 				{
 					string title = module.title;
 					dynamic videos = module.videos;
+					CourseModuleModel dbmodule;
 
-					_db.CourseModules.Add(new CourseModuleModel()
+					_db.CourseModules.Add(dbmodule = new CourseModuleModel()
 					{
-						Id = imodule,
 						CourseId = 1,
 						Title = title,
 						Slug = Utils.Slugify(title),
 					});
+					_db.SaveChanges();
 
 					int iclass = 1;
 					foreach(var video in videos)
@@ -195,7 +194,7 @@ namespace MITreinosReact.Controllers.API
 						_db.CourseLessons.Add(new CourseLessonModel()
 						{
 							Title = "Aula " + iclass++,
-							ModuleId = imodule,
+							ModuleId = dbmodule.Id,
 							Order = iclass,
 							VideoPath = video,
 							URLhash = ShortId.Generate(new shortid.Configuration.GenerationOptions()
@@ -206,10 +205,9 @@ namespace MITreinosReact.Controllers.API
 							}),
 						});
 					}
-
-					imodule++;
 				}
 			}
+			_db.SaveChanges();
 			#endregion
 
 			#region Mulheres
@@ -219,14 +217,15 @@ namespace MITreinosReact.Controllers.API
 				{
 					string title = module.title;
 					dynamic videos = module.videos;
+					CourseModuleModel dbmodule;
 
-					_db.CourseModules.Add(new CourseModuleModel()
+					_db.CourseModules.Add(dbmodule = new CourseModuleModel()
 					{
-						Id = imodule,
 						CourseId = 2,
 						Title = title,
 						Slug = Utils.Slugify(title),
 					});
+					_db.SaveChanges();
 
 					int iclass = 1;
 					foreach(var video in videos)
@@ -234,7 +233,7 @@ namespace MITreinosReact.Controllers.API
 						_db.CourseLessons.Add(new CourseLessonModel()
 						{
 							Title = "Aula " + iclass++,
-							ModuleId = imodule,
+							ModuleId = dbmodule.Id,
 							Order = iclass,
 							VideoPath = video,
 							URLhash = ShortId.Generate(new shortid.Configuration.GenerationOptions()
@@ -245,13 +244,11 @@ namespace MITreinosReact.Controllers.API
 							}),
 						});
 					}
-
-					imodule++;
 				}
 			}
+			_db.SaveChanges();
 			#endregion
 
-			_db.SaveChanges();
 			return Ok();
 		}
 	}
