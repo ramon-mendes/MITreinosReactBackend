@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,10 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MITreinosReact.DAL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MITreinosReact
 {
@@ -37,7 +37,7 @@ namespace MITreinosReact
 
             services.AddDbContext<MIContext>(options =>
 				options.UseSqlServer(Configuration.GetConnectionString("conn_sqlserver_azure"))
-                //options.UseSqlite(Configuration.GetConnectionString("conn_sqlserver_azure"))
+                //options.UseSqlite(Configuration.GetConnectionString("conn_sqlite"))
             );
 
             services.AddControllersWithViews()
@@ -49,7 +49,7 @@ namespace MITreinosReact
         {
 			_env = env;
 
-			db.Database.EnsureDeleted();
+			//db.Database.EnsureDeleted();
             db.Database.Migrate();
 
             //if (env.IsDevelopment())
