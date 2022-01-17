@@ -11,6 +11,9 @@ namespace MITreinosReact.Models
 		public int Id { get; set; }
 		public int LessonId { get; set; }
         public string Url { get; set; }
+        public string Filename { get; set; }
+        public string Extension { get; set; }
+        public string Size { get; set; }
 
 		public virtual CourseLessonModel Lesson { get; set; }
     }

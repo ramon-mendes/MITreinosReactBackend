@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,22 @@ namespace MITreinosReact.Areas.Admin.Controllers
 			});
 		}
 
+		private void LoadCharacteristics(CourseLessonDownloadModel model)
+        {
+			var webRequest = HttpWebRequest.Create(model.Url);
+			webRequest.Method = "HEAD";
+
+			using(var webResponse = webRequest.GetResponse())
+			{
+				var fileSize = webResponse.Headers.Get("Content-Length");
+				var fileSizeInMegaByte = Math.Round(Convert.ToDouble(fileSize) / 1024.0 / 1024.0, 2);
+				string size = fileSizeInMegaByte.ToString().Replace(',', '.') + " Mb";
+				model.Size = size;
+				model.Extension = System.IO.Path.GetExtension(model.Url);
+				model.Filename = WebUtility.UrlDecode(System.IO.Path.GetFileName(model.Url));
+			}
+		}
+
 		// POST: /Admin/LessonDownload/Add
 		[HttpPost]
 		public IActionResult Add(CourseLessonDownloadModel model)
@@ -56,6 +73,7 @@ namespace MITreinosReact.Areas.Admin.Controllers
 				return RetAddView(model);
 			}
 
+			LoadCharacteristics(model);
 			_db.CourseLessonDownloads.Add(model);
 			_db.SaveChanges();
 
@@ -76,6 +94,7 @@ namespace MITreinosReact.Areas.Admin.Controllers
 			model = UpdateModel(model.Id, entry =>
 			{
 				entry.Url = model.Url;
+				LoadCharacteristics(entry);
 			});
 
 			return RedirectToAction(nameof(List), new { id = model.LessonId });

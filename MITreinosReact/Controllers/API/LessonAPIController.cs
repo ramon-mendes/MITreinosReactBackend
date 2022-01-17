@@ -71,6 +71,13 @@ namespace MITreinosReact.Controllers.API
 				NextLessonHash = next?.URLhash,
 				PrevLessonTitle = prev?.Title,
 				NextLessonTitle = next?.Title,
+				Downloads = lesson.Downloads.Select(d => new
+				{
+					d.Url,
+					d.Filename,
+					d.Extension,
+					d.Size,
+				})
 			});
 		}
 		
