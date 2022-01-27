@@ -106,6 +106,18 @@ namespace MITreinosReact.Controllers.API
 			return Ok();
 		}
 
+		[HttpGet]
+		public IActionResult SetNote([Required] string hash, string note)
+		{
+			var lesson = _db.CourseLessons.SingleOrDefault(l => l.URLhash == hash);
+			if(lesson == null)
+				return NotFound();
+			var watchmodel = GetWatchModel(lesson.Id, UserLogged.Id);
+			watchmodel.Note = note;
+			_db.SaveChanges();
+			return Ok();
+		}
+
 		private async Task<string> SaveLessonMP3(string hash)
         {
             try
