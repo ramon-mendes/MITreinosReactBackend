@@ -20,8 +20,10 @@
 
 		<div class="row">
 			<div class="col-3">
-				@*User name:
-					<input type="text" name="@nameof(UI_PurchaseSearch.UserName)" value="@ViewBag.search.UserName" class="form-control js-dt" />*@
+				Nome: <input type="text" name="@nameof(UI_UserSearch.Name)" value="@ViewBag.search.Name" class="form-control" />
+			</div>
+			<div class="col-3">
+				E-mail: <input type="text" name="@nameof(UI_UserSearch.Email)" value="@ViewBag.search.Email" class="form-control" />
 			</div>
 		</div>
 
@@ -42,6 +44,7 @@
 				<tr>
 					<th>Nome</th>
 					<th>E-mail</th>
+					<th>Cursos</th>
 					<th width="1"></th>
 				</tr>
 			</thead>
@@ -52,6 +55,7 @@
 				<tr>
 					<td>@item.Name</td>
 					<td>@item.Email</td>
+					<td><a href="/Admin/User/Courses/@item.Id">@item.Courses.Count</a></td>
 					<td>
 						<a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-primary btn-sm">
 							<svg class="icon icon-pencil"><use xlink:href="#pencil"></use></svg>

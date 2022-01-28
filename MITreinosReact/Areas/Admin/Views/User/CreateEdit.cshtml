@@ -1,0 +1,48 @@
+﻿@model UserModel
+@section scripts {
+	<script>
+		$('#btn-save').click(function() {
+			$('#form-fields').submit();
+			return false;
+		});
+	</script>
+
+	@if(!ViewBag.is_create)
+	{
+	}
+}
+
+<nav>
+	@Html.Breadcrumb(ViewBag.is_create ? "Criar usuário" : "Editar usuário", "Usuários", "/Admin/User/List/")
+
+	<div class="actions">
+		<div class="container">
+			<div class="wrap">
+				<a href="" class="btn btn-primary" id="btn-save">
+					<svg class="icon icon-save"><use xlink:href="#save"></use></svg> Salvar
+				</a>
+			</div>
+		</div>
+	</div>
+</nav>
+
+<div class="container">
+	<form method="post" id="form-fields">
+		<div class="form-group">
+			<label class="control-label">Nome:</label>
+			<input type="text" class="form-control" asp-for="Name" />
+			<span asp-validation-for="Name" class="text-danger"></span>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label">E-mail:</label>
+			<input type="text" class="form-control" asp-for="Email" />
+			<span asp-validation-for="Email" class="text-danger"></span>
+		</div>
+
+		@if(!ViewBag.is_create)
+		{
+			<input type="hidden" value="@Model.Id" asp-for="Id" />
+		}
+	</form>
+</div>

@@ -15,6 +15,8 @@ namespace MITreinosReact.Models
 		[StringLength(150)]
 		public string Email { get; set; }
 		public string PWD { get; set; }
+
+		public virtual ICollection<UserCourseModel> Courses { get; set; }
 	}
 
 	public class UserValidator : AbstractValidator<UserModel>

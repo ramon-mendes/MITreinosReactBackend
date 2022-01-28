@@ -5,6 +5,7 @@
 	
 	<ul class="links">
 		<li class="@Html.PrintIf((string)ViewBag.controller == "Course", "active")"><a href="/Admin/Course/List"><svg class="icon icon-stream"><use xlink:href="#stream"></use></svg>Cursos</a></li>
+		<li class="@Html.PrintIf((string)ViewBag.controller == "User", "active")"><a href="/Admin/User/List"><svg class="icon icon-user-friends"><use xlink:href="#user-friends"></use></svg>Usuários</a></li>
 		<li><a href="/Admin/Auth/Logout"><svg class="icon icon-power-off"><use xlink:href="#power-off"></use></svg>Logout</a></li>
 	</ul>
 </div>

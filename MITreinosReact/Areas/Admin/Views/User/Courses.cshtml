@@ -1,0 +1,50 @@
+﻿@model UserModel
+@section scripts {
+	<script src="~/lib/bootstrap-multiselect-1.1.1/dist/js/bootstrap-multiselect.js"></script>
+	<link href="~/lib/bootstrap-multiselect-1.1.1/dist/css/bootstrap-multiselect.min.css" rel="stylesheet" />
+
+	<script>
+		$('#courses-select').multiselect();
+
+		$('#btn-save').click(function () {
+			$('#form-fields').submit();
+			return false;
+		});
+	</script>
+}
+<nav>
+	@Html.Breadcrumb("Cursos", "Usuários", "/Admin/User/List/")
+
+	<div class="actions">
+		<div class="container">
+			<div class="wrap">
+				<a href="" class="btn btn-primary" id="btn-save">
+					<svg class="icon icon-save"><use xlink:href="#save"></use></svg> Salvar
+				</a>
+			</div>
+		</div>
+	</div>
+</nav>
+
+<div class="container">
+	<form method="post" id="form-fields">
+		<label class="control-label">Cursos do usuário:</label>
+		<div>
+			<select id="courses-select" multiple="multiple" name="courses">
+				@foreach(var item in ViewBag.courses as List<CourseModel>)
+				{
+					if(Model.Courses.Count(c => c.CourseId == item.Id) == 0)
+					{
+						<option value="@item.Id">@item.Title</option>
+					}
+					else
+					{
+						<option value="@item.Id" selected>@item.Title</option>
+					}
+				}
+			</select>
+		</div>
+
+		<input type="hidden" value="@Model.Id" asp-for="Id" />
+	</form>
+</div>
