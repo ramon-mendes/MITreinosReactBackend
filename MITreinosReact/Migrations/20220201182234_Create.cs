@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MITreinosReact.Migrations
 {
-    public partial class Update2 : Migration
+    public partial class Create : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,15 +11,15 @@ namespace MITreinosReact.Migrations
                 name: "Courses",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Slug = table.Column<string>(type: "TEXT", nullable: true),
-                    Title = table.Column<string>(type: "TEXT", nullable: true),
-                    Path = table.Column<string>(type: "TEXT", nullable: true),
-                    LogoURL = table.Column<string>(type: "TEXT", nullable: true),
-                    About = table.Column<string>(type: "TEXT", nullable: true),
-                    PaymentBased = table.Column<bool>(type: "INTEGER", nullable: false),
-                    DateBased = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Path = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LogoURL = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    About = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PaymentBased = table.Column<bool>(type: "bit", nullable: false),
+                    DateBased = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,11 +30,11 @@ namespace MITreinosReact.Migrations
                 name: "UserManagers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 150, nullable: true),
-                    PWD = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    PWD = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -45,11 +45,11 @@ namespace MITreinosReact.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 150, nullable: true),
-                    PWD = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    PWD = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -60,11 +60,11 @@ namespace MITreinosReact.Migrations
                 name: "CourseModules",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CourseId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Slug = table.Column<string>(type: "TEXT", nullable: true),
-                    Title = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
+                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -81,12 +81,12 @@ namespace MITreinosReact.Migrations
                 name: "CoursePageModel",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CourseId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Order = table.Column<int>(type: "INTEGER", nullable: false),
-                    Title = table.Column<string>(type: "TEXT", nullable: true),
-                    Slug = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -103,13 +103,13 @@ namespace MITreinosReact.Migrations
                 name: "CourseLessons",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ModuleId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Order = table.Column<int>(type: "INTEGER", nullable: false),
-                    Title = table.Column<string>(type: "TEXT", nullable: true),
-                    VideoPath = table.Column<string>(type: "TEXT", nullable: true),
-                    URLhash = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ModuleId = table.Column<int>(type: "int", nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VideoPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    URLhash = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -126,13 +126,13 @@ namespace MITreinosReact.Migrations
                 name: "CourseLessonDownloads",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    LessonId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Url = table.Column<string>(type: "TEXT", nullable: true),
-                    Filename = table.Column<string>(type: "TEXT", nullable: true),
-                    Extension = table.Column<string>(type: "TEXT", nullable: true),
-                    Size = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LessonId = table.Column<int>(type: "int", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Filename = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Extension = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Size = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -149,12 +149,12 @@ namespace MITreinosReact.Migrations
                 name: "UserCourse",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CourseId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CurrentLessonId = table.Column<int>(type: "INTEGER", nullable: true),
-                    JsonMeta = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
+                    CurrentLessonId = table.Column<int>(type: "int", nullable: true),
+                    JsonMeta = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -183,14 +183,14 @@ namespace MITreinosReact.Migrations
                 name: "UserWatchs",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    LessonId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Watched = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Stars = table.Column<int>(type: "INTEGER", nullable: false),
-                    DtWatched = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Note = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LessonId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Watched = table.Column<bool>(type: "bit", nullable: false),
+                    Stars = table.Column<int>(type: "int", nullable: false),
+                    DtWatched = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -212,12 +212,11 @@ namespace MITreinosReact.Migrations
             migrationBuilder.InsertData(
                 table: "Courses",
                 columns: new[] { "Id", "About", "DateBased", "LogoURL", "Path", "PaymentBased", "Slug", "Title" },
-                values: new object[] { 1, null, false, "https://storagemvc.blob.core.windows.net/videos/pro4-23.jpg", null, false, "ie-homens", "IE Homens" });
-
-            migrationBuilder.InsertData(
-                table: "Courses",
-                columns: new[] { "Id", "About", "DateBased", "LogoURL", "Path", "PaymentBased", "Slug", "Title" },
-                values: new object[] { 2, null, false, "https://storagemvc.blob.core.windows.net/videos/pro4-23.jpg", null, false, "ie-mulheres", "IE Mulheres" });
+                values: new object[,]
+                {
+                    { 1, null, false, "https://storagemvc.blob.core.windows.net/videos/pro4-23.jpg", null, false, "ie-homens", "IE Homens" },
+                    { 2, null, false, "https://storagemvc.blob.core.windows.net/videos/pro4-23.jpg", null, false, "ie-mulheres", "IE Mulheres" }
+                });
 
             migrationBuilder.InsertData(
                 table: "UserManagers",
@@ -232,22 +231,20 @@ namespace MITreinosReact.Migrations
             migrationBuilder.InsertData(
                 table: "CoursePageModel",
                 columns: new[] { "Id", "CourseId", "Order", "Slug", "Title" },
-                values: new object[] { 1, 1, 1, "ieorientacoes", "Orientações" });
-
-            migrationBuilder.InsertData(
-                table: "CoursePageModel",
-                columns: new[] { "Id", "CourseId", "Order", "Slug", "Title" },
-                values: new object[] { 2, 2, 1, "ieorientacoes", "Orientações" });
-
-            migrationBuilder.InsertData(
-                table: "UserCourse",
-                columns: new[] { "Id", "CourseId", "CurrentLessonId", "JsonMeta", "UserId" },
-                values: new object[] { 1, 1, null, "{ 'show_accept': true }", 1 });
+                values: new object[,]
+                {
+                    { 1, 1, 1, "ieorientacoes", "Orientações" },
+                    { 2, 2, 1, "ieorientacoes", "Orientações" }
+                });
 
             migrationBuilder.InsertData(
                 table: "UserCourse",
                 columns: new[] { "Id", "CourseId", "CurrentLessonId", "JsonMeta", "UserId" },
-                values: new object[] { 2, 2, null, "{ 'show_accept': true }", 1 });
+                values: new object[,]
+                {
+                    { 1, 1, null, "{ 'show_accept': true }", 1 },
+                    { 2, 2, null, "{ 'show_accept': true }", 1 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_CourseLessonDownloads_LessonId",
@@ -288,13 +285,15 @@ namespace MITreinosReact.Migrations
                 name: "IX_UserManagers_Email",
                 table: "UserManagers",
                 column: "Email",
-                unique: true);
+                unique: true,
+                filter: "[Email] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
                 table: "Users",
                 column: "Email",
-                unique: true);
+                unique: true,
+                filter: "[Email] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserWatchs_LessonId",

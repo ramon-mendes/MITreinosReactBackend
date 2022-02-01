@@ -36,8 +36,8 @@ namespace MITreinosReact
             }));
 
             services.AddDbContext<MIContext>(options =>
-				//options.UseSqlServer(Configuration.GetConnectionString("conn_sqlserver_azure"))
-                options.UseSqlite(Configuration.GetConnectionString("conn_sqlite"))
+				options.UseSqlServer(Configuration.GetConnectionString("conn_sqlserver_azure"))
+                //options.UseSqlite(Configuration.GetConnectionString("conn_sqlite"))
             );
 
             services.AddControllersWithViews()
