@@ -6,10 +6,6 @@
 			return false;
 		});
 	</script>
-
-	@if(!ViewBag.is_create)
-	{
-	}
 }
 
 <nav>
@@ -38,6 +34,12 @@
 			<label class="control-label">E-mail:</label>
 			<input type="text" class="form-control" asp-for="Email" />
 			<span asp-validation-for="Email" class="text-danger"></span>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label">Senha:</label>
+			<input type="text" class="form-control" asp-for="PWD" />
+			<span asp-validation-for="PWD" class="text-danger"></span>
 		</div>
 
 		@if(!ViewBag.is_create)

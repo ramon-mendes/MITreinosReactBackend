@@ -32,10 +32,13 @@ namespace MITreinosReact.Classes
 			string current,
 			string prev_name1 = null, string prev_url1 = null,
 			string prev_name2 = null, string prev_url2 = null,
-			string prev_name3 = null, string prev_url3 = null
+			string prev_name3 = null, string prev_url3 = null,
+			string prev_name4 = null, string prev_url4 = null
 		)
 		{
 			var list = new List<(string Name, string Url)>();
+			if(prev_name4 != null)
+				list.Add((prev_name4, prev_url4));
 			if(prev_name3 != null)
 				list.Add((prev_name3, prev_url3));
 			if(prev_name2 != null)

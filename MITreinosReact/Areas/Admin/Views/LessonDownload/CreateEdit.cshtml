@@ -6,14 +6,10 @@
 			return false;
 		});
 	</script>
-
-	@if(!ViewBag.is_create)
-	{
-	}
 }
 
 <nav>
-	@Html.Breadcrumb(ViewBag.is_create ? "Criar download" : "Editar download", "Lições", "/Admin/Lesson/List/" + Model.Lesson.ModuleId, "Módulos", "/Admin/Module/List/" + Model.Lesson.Module.CourseId, "Cursos", "/Admin/Course/List/")
+	@Html.Breadcrumb(ViewBag.is_create ? "Criar download" : "Editar download", "Downloads", "/Admin/LessonDownload/List/" + Model.LessonId, "Lições", "/Admin/Lesson/List/" + Model.Lesson.ModuleId, "Módulos", "/Admin/Module/List/" + Model.Lesson.Module.CourseId, "Cursos", "/Admin/Course/List/")
 
 	<div class="actions">
 		<div class="container">

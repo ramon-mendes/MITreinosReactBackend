@@ -8,14 +8,10 @@
 			return false;
 		});
 	</script>
-
-	@if(!ViewBag.is_create)
-	{
-	}
 }
 
 <nav>
-	@Html.Breadcrumb(ViewBag.is_create ? "Criar lição" : "Editar lição", "Módulos", "/Admin/Module/List/" + Model.ModuleId, "Cursos", "/Admin/Course/List/")
+	@Html.Breadcrumb(ViewBag.is_create ? "Criar lição" : "Editar lição", "Lições", "/Admin/Lesson/List/" + Model.ModuleId, "Módulos", "/Admin/Module/List/" + Model.Module.CourseId, "Cursos", "/Admin/Course/List/")
 
 	<div class="actions">
 		<div class="container">
